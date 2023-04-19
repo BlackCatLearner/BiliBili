@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link href="{{static_url('CRUD/css/materialdesignicons.min.css')}}" rel="stylesheet">
+<link href="{{static_url('CRUD/css/style.min.css')}}" rel="stylesheet">
+<link rel="stylesheet" href="{{static_url('BILIBILI/static/Homepage/videoPlay/static/css/stardust-video.0.64b497703fccef5418339a77909e7a530175d7e6.css')}}">
+{% end %}
+
+{% block content %}
+
+<div class="container-fluid p-t-15">
+
+  <div class="row">
+
+    <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header">
+              <ul class="nav nav-tabs page-tabs pt-2 pl-3 pr-3">
+                  <li class="nav-item"> <a href="/index/" class="nav-link active">视频</a> </li>
+                  <li class="nav-item"> <a href="/index2/" class="nav-link">用户</a> </li>
+              </ul>
+            </div>
+        <div class="card-body">
+            {% set u = data['user'] %}
+                {% if u['data'] %}
+                {% for val in u['data'] %}
+                <div class="card">
+                <div id="v_upinfo" class="up-info report-wrap-module report-scroll-module">
+                    <div class="u-face has-pendant">
+                         {% if val.face %}
+                        <a href="" target="_blank" report-id="head" class="fa">
+                            <img src="/static/uploads/{{ val.face }}" width="100" height="100" class="up-face">
+                            <i class="auth o-auth"></i></a>
+                        {% else %}
+                        <a href="" target="_blank" report-id="head" class="fa">
+                            <img data-src="holder.js/200x200" width="100" height="100" class="up-face">
+                            <img src="/static/BILIBILI/static/Homepage/videoPlay/static/image/tx2.png" width="100" height="100" class="pendant"><!---->
+                            <i class="auth o-auth"></i></a>
+                        {% end %}
+                    </div>
+
+                    <div class="u-info">
+                        <div class="name" style="line-height:40px;height:40px;"><!---->
+                            <a href="/users/?id={{ val.Uid}}" target="_blank" report-id="name" class="username">{{ val.Uname }}</a>
+                            <a href="" target="_blank" class="message"><i class="van-icon-videodetails_messag"></i>发消息</a>
+                            {% if val.Ulive == 1 %}
+                                <a href="/live/?id={{ val.Uid }}" target="_blank" class="message">直播中</a>
+                            {% end %}
+                            <span>      {{val.info}}</span>
+                        </div><!---->
+                    </div>
+
+
+                </div>
+            </div>
+                {% end %}
+                {% end %}
+            {% module page2(u,data['q']) %}
+        </div>
+    </div>
+    </div>
+
+
+  </div>
+
+</div>
+
+<div class="col-md-9 pad-right">
+
+    <div class="col-md-3 mad-left">
+                <input type="text" id="input_q" class="form-control" placeholder="请输入搜索用户"
+                       aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" id="btn-search">搜索</button>
+                </div>
+    </div>
+
+
+
+{% end %}
+
+{% block foot %}
+<script>
+    $(document).ready(function (){
+        $(".user-list").click(function(){
+            var id = $(this).attr("data-content-id");
+            location.href = "/users/?id=" + id;
+        });
+    });
+
+    $(document).ready(function (){
+        $(".live-list").click(function(){
+            var Lid = $(this).attr("data-content-Lid");
+            location.href = "/live/?id=" + Lid;
+        });
+    });
+
+    $(document).ready(function (){
+        $("#btn-search").click(function(){
+            var q = $("#input_q").val();
+            location.href = "/index2/?q=" + q
+        });
+    });
+</script>
+{% end %}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>新增文档 - 光年(Light Year Admin V4)后台管理系统模板</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+<meta name="keywords" content="LightYear,LightYearAdmin,光年,后台模板,后台管理系统,光年HTML模板">
+<meta name="description" content="Light Year Admin V4是一个后台管理系统的HTML模板，基于Bootstrap v4.4.1。">
+{% extends "layout.html" %}
+
+{% block head %}
+<link href="{{static_url('CRUD/css/materialdesignicons.min.css')}}" rel="stylesheet">
+<link href="{{static_url('CRUD/css/style.min.css')}}" rel="stylesheet">
+{% end %}
+
+
+{% block content %}
+
+
+<div class="container-fluid p-t-15">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+          <div class="card-header">
+              <ul class="nav nav-tabs page-tabs pt-2 pl-3 pr-3">
+                  <li class="nav-item"> <a href="/video/?id={{ data['user'].Uid }}" class="nav-link active">视频投稿</a> </li>
+                  <li class="nav-item"> <a href="/videomodel/?id={{ data['user'].Uid }}" class="nav-link">模型生成</a> </li>
+                  <li class="nav-item"> <a href="/examinevideo/?id={{ data['user'].Uid }}" class="nav-link">审核列表</a> </li>
+                  <li class="nav-item"> <a href="/delete_video/?id={{ data['user'].Uid }}" class="nav-link">视频删除</a> </li>
+
+              </ul>
+            </div>
+        <div class="card-body">
+          <form class="row" id="form-data">
+
+            <div class="form-group col-md-12">
+                <!--标签名称-->
+                <label>模型</label>
+                <div class="row">
+                    {% raw xsrf_form_html() %}
+                    {% set model = data['model'] %}
+                    <!--每一行原本12等分，现在我们分成6等分，每一分占2个栅格-->
+                    {% for v in model %}
+                    <div class="col-md-2 text-left">
+                        <img src="../static/model/{{ v['image'] }}"
+                             class="lazyload blur-up img-fluid xingzuo-img border border-info rounded">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio"
+                                   id="input_model{{ v['val'] }}"
+                                   class="custom-control-input"
+                                   value="{{ v['name'] }}"
+                                   name="model">
+                            <label class="custom-control-label" for="input_model{{ v['val'] }}">{{ v['name'] }}</label>
+                        </div>
+                    </div>
+                    {% end %}
+                </div>
+                <p class="text-danger" id="error_model"></p>
+            </div>
+
+<!--             <div class="form-group col-md-12">-->
+<!--               <label for="input_url">音频</label>-->
+<!--               <input type="file" class="form-control-file" id="file_url">-->
+<!--               <input type="hidden" name="url" id="input_url" >-->
+<!--               <a class="btn btn-info" id="upload_url" href="javascript:void(0)">上传音频</a>-->
+<!--               <p class="text-danger" id="error_url"></p>-->
+<!--             </div>-->
+              <div class="input-group mb-3">
+                  <div class="custom-file">
+                      <input type="hidden" name="url" id="input_url">
+                      <input type="file" class="custom-file-input" id="file_url">
+                      <label class="custom-file-label" for="input_url">选择文件</label>
+                  </div>
+                  <div class="input-group-prepend">
+                      <button class="btn btn-outline-secondary" id="upload_url" type="button">上传音频</button>
+                  </div>
+              </div>
+              <p class="text-danger" id="error_url"></p>
+              <hr class="hr-dv">
+
+            <div class="form-group col-md-12">
+              <a href="javascript:void(0)" id="btn-sub" class="btn btn-primary">生成</a>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+{% end %}
+
+{% block foot %}
+<script src="{{ static_url('js/upload_logo.js')}}"></script>
+<script src="{{ static_url('js/upload_url.js')}}"></script>
+<script src="{{ static_url('js/request.js')}}"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+  bsCustomFileInput.init();
+});
+</script>
+
+<script>
+    $(document).ready(function(){
+      upload_url('/uploadrecord/');
+      request('/videomodel/','/user/',['model','url'],'成功');
+    });
+</script>
+
+{% end %}

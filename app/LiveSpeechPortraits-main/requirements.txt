@@ -1,0 +1,10 @@
+tqdm
+opencv_python==4.4.0.40
+librosa==0.7.0
+scikit_image
+scipy
+dominate
+albumentations==0.5.2
+numpy
+beautifulsoup4
+scikit-image

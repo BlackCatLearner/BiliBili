@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link href="{{static_url('CRUD/css/materialdesignicons.min.css')}}" rel="stylesheet">
+<link href="{{static_url('CRUD/css/style.min.css')}}" rel="stylesheet">
+{% end %}
+
+
+{% block content %}
+
+<div class="container-fluid p-t-15">
+
+  <div class="row">
+
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+              <ul class="nav nav-tabs page-tabs pt-2 pl-3 pr-3">
+                  <li class="nav-item"> <a href="/startlive/?id={{ data['user'].Uid }}" class="nav-link active">开启直播</a> </li>
+              </ul>
+            </div>
+            <div class="card-body">
+                <form id="form-data">
+<!--                    {% set u = data['user'] %}-->
+                    <div class="form-group">
+                        <label>直播名</label>
+                        {% raw xsrf_form_html() %}
+                        <input type="hidden" name="id" value="{{ u.Uid }}">
+                        <input type="text"
+                               name="Lname"
+                               class="form-control form-width"
+                               placeholder="请输入直播名！">
+                        <p class="text-danger" id="error_Lname"></p>
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <div class="custom-file">
+                          <input type="hidden" name="Llogo" id="input_Llogo" >
+                          <input type="file" class="custom-file-input" id="file_Llogo">
+                          <label class="custom-file-label" for="input_Llogo">选择封面</label>
+                        </div>
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary" id="upload_Llogo" type="button">上传封面</button>
+                        </div>
+                    </div>
+                    <hr class="hr-dv">
+                    <div id="image_Llogo">
+                        <img data-src="holder.js/200x200">
+                    </div>
+                    <p class="text-danger" id="error_Llogo"></p>
+                    <hr class="hr-dv">
+
+                    <div class="form-group">
+                            <a href="javascript:void(0)" id="btn-sub" class="btn btn-primary">开启</a>
+                    </div>
+
+                </form>
+
+
+
+            </div>
+        </div>
+        <div>
+
+        </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+{% end %}
+
+{% block foot %}
+<script src="{{ static_url('js/upload_Llogo.js')}}"></script>
+<script src="{{ static_url('js/request.js')}}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+  bsCustomFileInput.init();
+});
+</script>
+
+<script>
+    $(document).ready(function (){
+        upload_Llogo(200,200,'/uploadllogo/');
+        request('/startlive/','/user/',['Lname','Llogo'],'直播已开启');
+    })
+</script>
+{% end %}

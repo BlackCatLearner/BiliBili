@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link href="{{static_url('CRUD/css/materialdesignicons.min.css')}}" rel="stylesheet">
+<link href="{{static_url('CRUD/css/style.min.css')}}" rel="stylesheet">
+{% end %}
+
+
+{% block content %}
+
+<div class="container-fluid p-t-15">
+
+  <div class="row">
+
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+              <ul class="nav nav-tabs page-tabs pt-2 pl-3 pr-3">
+                  <li class="nav-item"> <a href="/index/" class="nav-link active">视频</a> </li>
+                  <li class="nav-item"> <a href="/index2/" class="nav-link">用户</a> </li>
+              </ul>
+            </div>
+            <div class="card-body">
+                <div class="mainCont clearfix" id="animation" js-move="true">
+                    <div class="pic-list fl" js-tab="true">
+
+                      <ul class="pic-list__wrapper clearfix tab-cont__item tab-cont__cur">
+                        {% set v8 = data['video'] %}
+                        {% if v8['data'] %}
+                        {% for val in v8['data'] %}
+                          <li class="item">
+                            <a href="#" class="img-link" data-content-id="{{ val.Vid }}">
+                              <img src="/static/video/imges/{{ val.logo }}" alt="#">
+                              <span class="mask"></span>
+                              <span class="time">3:39</span>
+                            </a>
+                            <div class="img-info">
+                              <a href="#">{{ val.Vname }}</a>
+                              <div class="btm">
+                                <div class="user"><i></i>{{ val.user.Uname }}</div>
+                                <div class="online"><i></i>{{ val.view }}</div>
+                              </div>
+                            </div>
+                          </li>
+                        {% end %}
+                        {% end %}
+                      </ul>
+                        {% module page(v8,data['q']) %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+
+        </div>
+    </div>
+
+  </div>
+
+</div>
+
+{% end %}
+
+{% block foot %}
+<script>
+    $(document).ready(function (){
+        $(".video-list").click(function(){
+            var id = $(this).attr("data-content-id");
+            location.href = "/playchat/?id=" + id;
+        });
+    });
+
+
+
+</script>
+{% end %}

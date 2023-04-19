@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>新增文档 - 光年(Light Year Admin V4)后台管理系统模板</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+<meta name="keywords" content="LightYear,LightYearAdmin,光年,后台模板,后台管理系统,光年HTML模板">
+<meta name="description" content="Light Year Admin V4是一个后台管理系统的HTML模板，基于Bootstrap v4.4.1。">
+<meta name="author" content="yinqi">
+<link rel="stylesheet" href="{{static_url('CRUD/css/materialdesignicons.min.css')}}">
+<link rel="stylesheet" href="{{static_url('CRUD/css/bootstrap.min.css')}}">
+<!--标签插件-->
+<link rel="stylesheet" href="{{static_url('CRUD/js/jquery-tagsinput/jquery.tagsinput.min.css')}}">
+<link rel="stylesheet" href="{{static_url('CRUD/css/style.min.css')}}">
+</head>
+
+<body>
+<div class="container-fluid p-t-15">
+  
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          
+          <form class="row" id="form-data">
+            <div class="form-group col-md-12">
+              <label for="name">昵称</label>
+              {% raw xsrf_form_html() %}
+              <input type="text" class="form-control" id="name" name="name" value="" placeholder="请输入昵称" />
+              <p class="text-danger" id="error_name"></p>
+            </div>
+            <div class="form-group col-md-12">
+              <label for="pwd">密码</label>
+              <input type="password" class="form-control" id="pwd" name="pwd" value="" placeholder="请输入密码" />
+              <p class="text-danger" id="error_pwd"></p>
+            </div>
+            <div class="form-group col-md-12">
+              <label for="email">邮箱</label>
+              <input type="email" class="form-control" id="email" name="email" value="" placeholder="请输入邮箱" />
+              <p class="text-danger" id="error_email"></p>
+            </div>
+            <div class="form-group col-md-12">
+              <label for="phone">手机号码</label>
+              <input type="text" class="form-control" id="phone" name="phone" value="" placeholder="请输入手机号码" />
+              <p class="text-danger" id="error_phone"></p>
+            </div>
+
+
+<!--            <div class="form-group col-md-12">-->
+<!--              <label>多图上传</label>-->
+<!--              <div class="form-controls">-->
+<!--                -->
+<!--                <ul class="list-inline row lyear-uploads-pic mb-0">-->
+<!--                  <li class="col-6 col-md-4 col-lg-2">-->
+<!--                    <figure>-->
+<!--                      <img src="images/gallery/15.jpg" alt="图片一">-->
+<!--                      <figcaption>-->
+<!--                        <a class="btn btn-round btn-square btn-primary" href="#!"><i class="mdi mdi-eye"></i></a>-->
+<!--                        <a class="btn btn-round btn-square btn-danger" href="#!"><i class="mdi mdi-delete"></i></a>-->
+<!--                      </figcaption>-->
+<!--                    </figure>-->
+<!--                  </li>-->
+<!--                  <li class="col-6 col-md-4 col-lg-2">-->
+<!--                    <figure>-->
+<!--                      <img src="images/gallery/16.jpg" alt="图片二">-->
+<!--                      <figcaption>-->
+<!--                        <a class="btn btn-round btn-square btn-primary" href="#!"><i class="mdi mdi-eye"></i></a>-->
+<!--                        <a class="btn btn-round btn-square btn-danger" href="#!"><i class="mdi mdi-delete"></i></a>-->
+<!--                      </figcaption>-->
+<!--                    </figure>-->
+<!--                  </li>-->
+<!--                  <li class="col-6 col-md-4 col-lg-2">-->
+<!--                    <figure>-->
+<!--                      <img src="images/gallery/17.jpg" alt="图片三">-->
+<!--                      <figcaption>-->
+<!--                        <a class="btn btn-round btn-square btn-primary" href="#!"><i class="mdi mdi-eye"></i></a>-->
+<!--                        <a class="btn btn-round btn-square btn-danger" href="#!"><i class="mdi mdi-delete"></i></a>-->
+<!--                      </figcaption>-->
+<!--                    </figure>-->
+<!--                  </li>-->
+<!--                  <li class="col-6 col-md-4 col-lg-2">-->
+<!--                    <a class="pic-add" id="add-pic-btn" href="#!" title="点击上传"></a>-->
+<!--                  </li>-->
+<!--                </ul>-->
+<!--              </div>-->
+<!--            </div>-->
+
+
+<!--            <div class="form-group">-->
+<!--              <label for="input_face">头像</label>-->
+<!--              <input type="file" class="form-control-file" id="file_face">-->
+<!--              <input type="hidden" name="face" id="input_face" value="">-->
+<!--              <a class="btn btn-info" id="upload_face" href="javascript:void(0)">上传头像</a>-->
+<!--              <p class="text-danger" id="error_face"></p>-->
+<!--            </div>-->
+
+
+
+            <div class="form-group col-md-12">
+              <a href="javascript:void(0)" id="btn-sub" class="btn btn-primary">添加用户</a>
+              <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+            </div>
+          </form>
+ 
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+</div>
+<script src="https://lib.baomitu.com/lazysizes/5.3.2/lazysizes.min.js"></script>
+<script src="https://lib.baomitu.com/holder/2.9.8/holder.min.js"></script>
+
+<script src="{{ static_url('js/upload.js')}}"></script>
+<script src="{{ static_url('js/request.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/perfect-scrollbar.min.js')}}"></script>
+
+<!--标签插件-->
+<script type="text/javascript" src="{{static_url('CRUD/js/jquery-tagsinput/jquery.tagsinput.min.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/main.min.js')}}"></script>
+
+<script>
+    $(document).ready(function(){
+        request('/crudadduser/','/cruduser/',['name','pwd','email','phone'],'成功');
+    });
+</script>
+
+</body>
+</html>

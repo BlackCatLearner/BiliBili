@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>更新视频点赞关系管理 - 光年(Light Year Admin V4)后台管理系统模板</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+<meta name="keywords" content="LightYear,LightYearAdmin,光年,后台模板,后台管理系统,光年HTML模板">
+<meta name="description" content="Light Year Admin V4是一个后台管理系统的HTML模板，基于Bootstrap v4.4.1。">
+<meta name="author" content="yinqi">
+<link rel="stylesheet" href="{{static_url('CRUD/css/materialdesignicons.min.css')}}">
+<link rel="stylesheet" href="{{static_url('CRUD/css/bootstrap.min.css')}}">
+<!--标签插件-->
+<link rel="stylesheet" href="{{static_url('CRUD/js/jquery-tagsinput/jquery.tagsinput.min.css')}}">
+<link rel="stylesheet" href="{{static_url('CRUD/css/style.min.css')}}">
+</head>
+
+<body>
+<div class="container-fluid p-t-15">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          {% set rvu_like = data['relationvideolike'] %}
+          <form class="row" id="form-data">
+            <div class="form-group col-md-12">
+              <label for="Vid">视频</label>
+              {% raw xsrf_form_html() %}
+              <input type="hidden" name="RVUid_like" value="{{ rvu_like.RVUid_like }}">
+              <input type="text" class="form-control" id="Vid" name="Vid" value="{{ rvu_like.Vid }}" placeholder="请输入视频id" />
+              <p class="text-danger" id="error_Vid"></p>
+            </div>
+
+            <div class="form-group col-md-12">
+              <label for="Uid">用户</label>
+              <input type="text" class="form-control" id="Uid" name="Uid" value="{{ rvu_like.Uid }}" placeholder="请输入点赞视频的用户id" />
+              <p class="text-danger" id="error_Uid"></p>
+            </div>
+
+            <div class="form-group col-md-12">
+              <a href="javascript:void(0)" id="btn-sub" class="btn btn-primary">更新</a>
+              <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<script src="https://lib.baomitu.com/lazysizes/5.3.2/lazysizes.min.js"></script>
+<script src="https://lib.baomitu.com/holder/2.9.8/holder.min.js"></script>
+
+<script src="{{ static_url('js/request.js')}}"></script>
+
+<script type="text/javascript" src="{{static_url('CRUD/js/jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/perfect-scrollbar.min.js')}}"></script>
+
+<!--标签插件-->
+<script type="text/javascript" src="{{static_url('CRUD/js/jquery-tagsinput/jquery.tagsinput.min.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/main.min.js')}}"></script>
+
+<script>
+    $(document).ready(function(){
+      request('/cruduploadrelationvideolike/','/crudrelationvideolike/',['Uid','Vid'],'成功');
+    });
+</script>
+
+</body>
+</html>

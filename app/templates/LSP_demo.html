@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{data['title']}}</title>
+</head>
+<body>
+<form id="_form" method="post" action="/lspdemo/">
+  <input type="hidden" name="name" value="value" />
+    {% raw xsrf_form_html() %}
+  <a onclick="document.getElementById('_form').submit();">点击提交</a>
+</form>
+
+</body>
+</html>
+
+<script>
+
+</script>

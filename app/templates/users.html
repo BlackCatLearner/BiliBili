@@ -1,0 +1,308 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link href="{{static_url('CRUD/css/materialdesignicons.min.css')}}" rel="stylesheet">
+<link href="{{static_url('CRUD/css/style.min.css')}}" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="{{static_url('BILIBILI/static/Homepage/videoPlay/static/css/stardust-video.0.64b497703fccef5418339a77909e7a530175d7e6.css')}}">
+{% end %}
+
+
+{% block content %}
+
+<div class="container-fluid p-t-15">
+
+    <div class="row">
+
+        <div class="col-lg-12">
+
+            <div class="card clearfix">
+                <ul class="nav nav-tabs page-tabs pt-2 pl-3 pr-3">
+                    <li class="nav-item"><a href="/user/" class="nav-link active">主页</a></li>
+                    <li class="nav-item"><a href="/uservideolist/?id={{ data['user'].Uid }}" class="nav-link">投稿</a>
+                    </li>
+                    <li class="nav-item"><a href="/userlike/?id={{ data['user'].Uid }}" class="nav-link">
+                        <p>点赞</p>
+                        <p>{{ data['Ulike'] }}</p></a></li>
+                    <li class="nav-item"><a href="/usercollect/?id={{ data['user'].Uid }}" class="nav-link">
+                        <p>收藏</p>
+                        <p>{{ data['Ucollect'] }}</p></a></li>
+                    </a> </li>
+                    <li class="nav-item"><a href="/userstar/?id={{ data['user'].Uid }}" class="nav-link">
+                        <p>关注数</p>
+                        <p>{{ data['Ustar'] }}</p></a></li>
+                    <li class="nav-item"><a href="/userfans/?id={{ data['user'].Uid }}" class="nav-link">
+                        <p>粉丝数</p>
+                        <p>{{ data['Ufans'] }}</p></a></li>
+
+                </ul>
+
+
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">TA的视频</div>
+
+                </div>
+
+                <div class="card-body">
+                    <ul class="pic-list__wrapper clearfix tab-cont__item tab-cont__cur">
+                        {% set v8 = data['video'] %}
+                        {% if v8['data'] %}
+                        {% for val in v8['data'] %}
+                        <li class="item">
+                            <a href="#" class="img-link" data-content-id="{{ val.Vid }}">
+                                <img src="/static/video/imges/{{ val.logo }}" alt="#">
+                                <span class="mask"></span>
+                                <span class="time">3:39</span>
+                            </a>
+                            <div class="img-info">
+                                <a href="#">{{ val.Vname }}</a>
+                                <div class="btm">
+                                    <div class="user"><i></i>{{ val.user.Uname }}</div>
+                                    <div class="online"><i></i>{{ val.view }}</div>
+                                </div>
+                            </div>
+                        </li>
+                        {% end %}
+                        {% end %}
+                    </ul>
+                </div>
+            </div>
+
+
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">TA最近点赞的视频</div>
+
+                </div>
+
+                <div class="card-body">
+
+                    <ul class="pic-list__wrapper clearfix tab-cont__item tab-cont__cur">
+                        {% set vl = data['video_like'] %}
+                        {% if vl['data'] %}
+                        {% for val in vl['data'] %}
+                        <li class="item">
+                            <a href="#" class="img-link" data-content-id="{{ val.Vid }}">
+                                <img src="/static/video/imges/{{ val.logo }}" alt="#">
+                                <span class="mask"></span>
+                                <span class="time">3:39</span>
+                            </a>
+                            <div class="img-info">
+                                <a href="#">{{ val.Vname }}</a>
+                                <div class="btm">
+                                    <div class="user"><i></i>{{ val.user.Uname }}</div>
+                                    <div class="online"><i></i>{{ val.view }}</div>
+                                </div>
+                            </div>
+                        </li>
+                        {% end %}
+                        {% end %}
+                    </ul>
+
+                </div>
+
+            </div>
+        </div>
+
+        {% set u = data['user'] %}
+        <div class="col-lg-4">
+
+            <div class="card">
+                <div id="v_upinfo" class="up-info report-wrap-module report-scroll-module">
+                    <div class="u-face has-pendant">
+                         {% if data['user'].face %}
+                        <a href="" target="_blank" report-id="head" class="fa">
+                            <img src="/static/uploads/{{ data['user'].face }}" width="48" height="48" class="up-face">
+                            <i class="auth o-auth"></i></a>
+                        {% else %}
+                        <a href="" target="_blank" report-id="head" class="fa">
+                            <img data-src="holder.js/200x200" width="48" height="48" class="up-face">
+                            <img src="/static/BILIBILI/static/Homepage/videoPlay/static/image/tx2.png" width="80" height="80" class="pendant"><!---->
+                            <i class="auth o-auth"></i></a>
+                        {% end %}
+                    </div>
+
+                    <div class="u-info">
+                        <div class="name" style="line-height:40px;height:40px;"><!---->
+                            <a href="/users/?id={{ data['user'].Uid}}" target="_blank" report-id="name" class="username">{{ data['user'].Uname }}</a>
+                            <a href="" target="_blank" class="message"><i class="van-icon-videodetails_messag"></i>发消息</a>
+                        </div><!---->
+                    </div>
+                        <form id="form-data">
+                    {% raw xsrf_form_html() %}
+                    <input type="hidden" name="Uid" value="{{ data['self_user'].Uid }}">
+                    <input type="hidden" name="follower_id" value="{{ data['user'].Uid }}">
+                    {% if data['relation_user'] %}
+                    <div class="form-group">
+                        <div class="btn-panel"><!---->
+                            <div href="javascript:void(0)" id="btn-sub2"
+                           data-content-Rid="{{ u.Uid }}" class="default-btn follow-btn b-gz not-follow"><span><i class="van-icon-general_addto_s"></i>
+                            取关 <span></span></span><!----><!---->
+                            </div>
+                        </div>
+
+                    </div>
+                    {% else %}
+                    <div class="form-group">
+                        <div class="btn-panel"><!---->
+                            <div href="javascript:void(0)" id="btn-sub"
+                           data-content-Rid="{{ u.Uid }}" class="default-btn follow-btn b-gz not-follow"><span><i class="van-icon-general_addto_s"></i>
+                            关注 <span></span></span><!----><!---->
+                            </div>
+                        </div>
+                    </div>
+                    {% end %}
+                </form>
+
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+                {% if data['user'].Ulive == 1 %}
+                <div class="card-header">
+                    <div class="card-title">正在直播中</div>
+
+<!--                    <div class="more-wrap">-->
+<!--                        <a href="/userprofile/?id={{ data['user'].Uid }}" class="more">下播<i></i></a>-->
+<!--                    </div>-->
+                </div>
+                <div class="card-body">
+
+                    <img class="card-img-top mx-auto d-block video-img blur-up img-bk lazyloaded"
+                         src="/static/live/imges/{{ data['live'].Llogo }}" style="width:300px;height:200px">
+                    <span>直播房间名： {{ data['live'].Lname }}</span>
+                </div>
+
+                {% else %}
+                <div class="card-header">
+                    <div class="card-title">主播正在休息</div>
+
+                </div>
+
+
+                {% end %}
+
+
+
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">个人资料</div>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form id="form-data">
+                        {% raw xsrf_form_html() %}
+
+
+                        <div class="form-group">
+                            <label>性别</label>
+                            {% if u.sex == 1 %} <label>男</label>{% end %}
+                            {% if u.sex == 2 %} <label>女</label>{% end %}
+                            {% if u.sex == 3 %} <label>保密</label>{% end %}
+                        </div>
+                        <!--表单字段的容器标签-->
+                        <div class="form-group">
+                            <!--标签名称-->
+                            <label>星座</label>
+                            {% set xz = data['xz'] %}
+                            <!--每一行原本12等分，现在我们分成6等分，每一分占2个栅格-->
+                            {% for v in xz %}
+                            {% if u.xingzuo ==v['val'] %} <label>{{ v['name'] }}</label>{% end %}
+                            {% end %}
+                        </div>
+
+                        <div class="form-group">
+                            <label>个性签名</label>
+                            <label>{{u.info}}</label>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+{% end %}
+
+
+{% block foot %}
+<script src="{{ static_url('js/relation.js')}}"></script>
+<script src="{{ static_url('js/relation2.js')}}"></script>
+
+
+<script>
+    $(document).ready(function (){
+        $(".userstar-list").click(function(){
+            var id = $(this).attr("data-content-USid");
+            location.href = "/userstar/?id=" + id;
+        });
+    });
+
+    $(document).ready(function (){
+        $(".userlike-list").click(function(){
+            var id = $(this).attr("data-content-ULid");
+            location.href = "/userlike/?id=" + id;
+        });
+    });
+
+    $(document).ready(function (){
+        $(".usercollect-list").click(function(){
+            var id = $(this).attr("data-content-UCid");
+            location.href = "/usercollect/?id=" + id;
+        });
+    });
+
+    $(document).ready(function (){
+        $(".userfans-list").click(function(){
+            var id = $(this).attr("data-content-UFid");
+            location.href = "/userfans/?id=" + id;
+        });
+    });
+
+
+    $(document).ready(function (){
+        $(".img-link").click(function(){
+            var id = $(this).attr("data-content-id");
+            location.href = "/playchat/?id=" + id;
+        });
+    });
+
+    $(document).ready(function (){
+        $(".live-list").click(function(){
+            var Lid = $(this).attr("data-content-Lid");
+            location.href = "/live/?id=" + Lid;
+        });
+    });
+
+
+    $(document).ready(function (){
+        relation('/usersrelation/','/users/',[],'ok');
+    })
+
+    $(document).ready(function (){
+        relation2('/usersrelation2/','/users/',[],'ok');
+    })
+</script>
+{% end %}

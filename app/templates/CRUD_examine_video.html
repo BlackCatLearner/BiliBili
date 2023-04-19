@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>更新视频</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+  <link rel="stylesheet" href="{{ static_url('dplayer/DPlayer.min.css')}}">
+      <script src="{{ static_url('dplayer/DPlayer.min.js')}}"></script>
+
+<meta name="keywords" content="LightYear,LightYearAdmin,光年,后台模板,后台管理系统,光年HTML模板">
+<meta name="description" content="Light Year Admin V4是一个后台管理系统的HTML模板，基于Bootstrap v4.4.1。">
+<meta name="author" content="yinqi">
+<link rel="stylesheet" href="{{static_url('CRUD/css/materialdesignicons.min.css')}}">
+<link rel="stylesheet" href="{{static_url('CRUD/css/bootstrap.min.css')}}">
+<!--标签插件-->
+<link rel="stylesheet" href="{{static_url('CRUD/js/jquery-tagsinput/jquery.tagsinput.min.css')}}">
+<link rel="stylesheet" href="{{static_url('CRUD/css/style.min.css')}}">
+</head>
+
+<body>
+<div class="container-fluid p-t-15">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          {% set v = data['video'] %}
+          <form class="row" id="form-data">
+            <div class="form-group col-md-12">
+              <label>电影名————{{ v.Vname }}</label>
+              {% raw xsrf_form_html() %}
+              <input type="hidden" name="Vid" value="{{ v.Vid }}">
+            </div>
+            <div class="form-group col-md-12">
+              <label>up主id号————{{ v.Uid }}</label>
+
+            </div>
+
+            <div class="form-group col-md-12">
+              <label>封面</label>
+
+              <div id="image_logo">
+                {% if v.logo %}
+                <img src="/static/video/imges/{{ v.logo }}" style="width:400px;height:300px">
+                {% else %}
+                <img data-src="holder.js/200x200">
+                {% end %}
+              </div>
+              <hr class="hr-dv">
+            </div>
+
+            <div id="dplayer"></div>
+
+            <div class="form-group col-md-12">
+              <label>审核结果</label>
+              <div class="form-controls">
+                <select name="examine" class="form-control" id="examine">
+
+                    <option value="1" selected>通过</option>
+                    <option value="2">不通过</option>
+
+                </select>
+              </div>
+              <p class="text-danger" id="error_examine"></p>
+            </div>
+            <div class="form-group col-md-12">
+              <label for="examine_info">审核理由</label>
+              <textarea class="form-control" id="examine_info" name="examine_info" rows="5" value="{{ v.examine_info }}" placeholder="理由">{% if v.examine_info %}{{ v.examine_info }}{% end %}</textarea>
+              <p class="text-danger" id="error_examine_info"></p>
+            </div>
+
+            <div class="form-group col-md-12">
+              <a href="javascript:void(0)" id="btn-sub" class="btn btn-primary">提交审核</a>
+              <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<script src="https://lib.baomitu.com/lazysizes/5.3.2/lazysizes.min.js"></script>
+<script src="https://lib.baomitu.com/holder/2.9.8/holder.min.js"></script>
+
+<script src="{{ static_url('js/request.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/perfect-scrollbar.min.js')}}"></script>
+
+<!--标签插件-->
+<script type="text/javascript" src="{{static_url('CRUD/js/jquery-tagsinput/jquery.tagsinput.min.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/main.min.js')}}"></script>
+
+<script>
+
+      function dplayer(vur1){
+        window.dp = new DPlayer({
+            container:document.getElementById('dplayer'),
+            screenshot:true,
+            autoplay:false,
+            theme: '#FADFA3',
+            loop: true,
+            lang: 'zh-cn',
+            hotkey: true,
+            preload: 'auto',
+            volume: 0.7,
+            mutex: true,
+            video:{
+                url: vur1,
+            },
+            danmaku:{
+                id: "{{ data['video'].Vid }}",
+                api: '/dm/',
+                user:"{% if handler.name %}{{ handler.name }}{% else %}游客{% end %}"
+            }
+        });
+    }
+
+    dplayer(" /static/video/{{ data['video'].url }} ");
+
+    $(document).ready(function(){
+      request('/crudexaminevideo/','/crudvideo/',['examine','Vid','examine_info'],'成功');
+    });
+</script>
+
+</body>
+</html>

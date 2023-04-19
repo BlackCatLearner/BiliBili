@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>更新视频</title>
+<link rel="icon" href="favicon.ico" type="image/ico">
+<meta name="keywords" content="LightYear,LightYearAdmin,光年,后台模板,后台管理系统,光年HTML模板">
+<meta name="description" content="Light Year Admin V4是一个后台管理系统的HTML模板，基于Bootstrap v4.4.1。">
+<meta name="author" content="yinqi">
+<link rel="stylesheet" href="{{static_url('CRUD/css/materialdesignicons.min.css')}}">
+<link rel="stylesheet" href="{{static_url('CRUD/css/bootstrap.min.css')}}">
+<!--标签插件-->
+<link rel="stylesheet" href="{{static_url('CRUD/js/jquery-tagsinput/jquery.tagsinput.min.css')}}">
+<link rel="stylesheet" href="{{static_url('CRUD/css/style.min.css')}}">
+</head>
+
+<body>
+<div class="container-fluid p-t-15">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          {% set l = data['live'] %}
+          <form class="row" id="form-data">
+            <div class="form-group col-md-12">
+              <label for="Lname">直播名</label>
+              {% raw xsrf_form_html() %}
+              <input type="hidden" name="Lid" value="{{ l.Lid }}">
+              <input type="text" class="form-control" id="Lname" name="Lname" value="{{ l.Lname }}" placeholder="请输入视频名" />
+              <p class="text-danger" id="error_Lname"></p>
+            </div>
+            <div class="form-group col-md-12">
+              <label for="Uid">主播id号</label>
+              <input type="text" class="form-control" id="Uid" name="Uid" value="{{ l.Uid }}" placeholder="请输入主播id号" />
+              <p class="text-danger" id="error_Uid"></p>
+            </div>
+            <div class="form-group col-md-12">
+              <label for="gift">礼物数</label>
+              <input type="text" class="form-control" id="gift" name="gift" value="{{ l.gift }}" placeholder="请输入礼物数" />
+              <p class="text-danger" id="error_gift"></p>
+            </div>
+            <div class="form-group col-md-12">
+              <label for="watch">观看人数</label>
+              <input type="text" class="form-control" id="watch" name="watch" value="{{ l.watch }}" placeholder="请输入观看人数" />
+              <p class="text-danger" id="error_watch"></p>
+            </div>
+
+            <div class="form-group col-md-12">
+              <label for="input_Llogo">封面</label>
+              <input type="file" class="form-control-file" id="file_Llogo">
+              <input type="hidden" name="Llogo" id="input_Llogo" value="{% if l.Llogo %}{{ l.Llogo }}{% end %}">
+              <hr class="hr-dv">
+              <div id="image_Llogo">
+                {% if l.Llogo %}
+                <img src="/static/video/imges/{{ l.Llogo }}" style="width:400px;height:300px">
+                {% else %}
+                <img data-src="holder.js/200x200">
+                {% end %}
+              </div>
+              <hr class="hr-dv">
+              <a class="btn btn-info" id="upload_Llogo" href="javascript:void(0)">更新封面</a>
+              <p class="text-danger" id="error_Llogo"></p>
+            </div>
+
+
+
+            <div class="form-group col-md-12">
+              <a href="javascript:void(0)" id="btn-sub" class="btn btn-primary">更新</a>
+              <button type="button" class="btn btn-default" onclick="javascript:history.back(-1);return false;">返 回</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<script src="https://lib.baomitu.com/lazysizes/5.3.2/lazysizes.min.js"></script>
+<script src="https://lib.baomitu.com/holder/2.9.8/holder.min.js"></script>
+
+<script src="{{ static_url('js/upload_Llogo.js')}}"></script>
+<script src="{{ static_url('js/request.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/jquery.min.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/perfect-scrollbar.min.js')}}"></script>
+
+<!--标签插件-->
+<script type="text/javascript" src="{{static_url('CRUD/js/jquery-tagsinput/jquery.tagsinput.min.js')}}"></script>
+<script type="text/javascript" src="{{static_url('CRUD/js/main.min.js')}}"></script>
+
+<script>
+    $(document).ready(function(){
+      upload_Llogo(400,300,'/uploadllogo/');
+      request('/cruduploadlive/','/crudlive/',['Uid','Lname','Llogo','watch','gift'],'成功');
+    });
+</script>
+
+</body>
+</html>

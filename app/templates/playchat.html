@@ -1,0 +1,395 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <style>
+        .Dplayer_box{overflow:hidden;width:980px;height:456px;margin:100px auto;display:block;border-top:1px solid #e5e9ef;border-bottom:1px solid #e5e9ef;background-color:#f6f9fa}#player1{background-size:100% 100%;margin-top:30px}.player_av{width:800px;height:100%;float:left;background:#000}.Dplayer_danmu{width:299px;float:right;height:100%}.Dplayer_watching{width:100%;height:60px;line-height:60px;display:inline-block;font-size:12px;color:#99a2aa;box-shadow:#ddd 0 0 5px}.Dplayer-watching-number{margin-left:20px;font-size:18px;font-weight:700;color:#222;padding:0}.Dplayer_list{width:100%;height:30px;overflow:hidden}.Dplayer_list li{width:60px;height:30px;float:left;color:#99a2aa;font-size:12px;text-align:center;line-height:30px}.Dplayer_list li:nth-child(1){width:58px!important}.Dplayer_list li:nth-child(2){width:136px!important}.list_ovefiow{width:100%;height:363px;overflow:auto}.danmuku_list{width:100%;height:20px;line-height:20px;text-align:left;color:#99a2aa;font-size:12px;display:block;margin:auto;overflow:auto;margin-top:5px}.danmuku_list li{float:left;width:60px;height:20px;white-space:nowrap;cursor:pointer}.danmuku_list li:nth-child(1){width:58px;margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.danmuku_list li:nth-child(2){width:125px;margin-right:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.danmuku_list li:nth-child(2):hover{color:#00a1d6}.danmuku_list li:nth-child(3){margin-left:5px}
+    </style>
+
+    <link rel="stylesheet"
+          href="{{static_url('BILIBILI/static/Homepage/videoPlay/static/css/stardust-video.0.64b497703fccef5418339a77909e7a530175d7e6.css')}}">
+    <link rel="stylesheet" href="{{ static_url('dplayer/DPlayer.min.css')}}">
+    <link rel="stylesheet" href="{{ static_url('ue/third-party/SyntaxHighlighter/shCoreDefault.css')}}">
+    <script src="{{ static_url('ue/third-party/SyntaxHighlighter/shCore.js')}}"></script>
+    <script src="{{ static_url('dplayer/DPlayer.min.js')}}"></script>
+    <script type="text/javascript" charset="utf-8" src="{{ static_url('ue/ueditor.config.js')}}"></script>
+    <script type="text/javascript" charset="utf-8" src="{{ static_url('ue/ueditor.all.min.js')}}"></script>
+    <script type="text/javascript" charset="utf-8" src="{{ static_url('ue/lang/zh-cn/zh-cn.js')}}"></script>
+    <script src="https://lib.baomitu.com/sockjs-client/1.6.0/sockjs.min.js"></script>
+
+
+{% end %}
+
+{% block content %}
+
+    <div class="v-wrap" style="margin-left: 40px;margin-top: 20px;margin-bottom: 20px;margin-right: 177px">
+
+
+        <div class="l-con">
+
+
+            <div id="viewbox_report" class="video-info report-wrap-module report-scroll-module"><!-- 视频标题位置 -->
+                <h1  class="video-title"><!---->
+                    <span class="tit tr-fix">  {{ data['video'].Vname }}</span></h1>
+                <div class="video-data">
+                    <span class="rank">最高全站日排行第1名     </span>
+                    <span>{{ data['video'].VcreateAt }}</span>
+                </div>
+                <div class="video-data">
+                    <span title="总播放数--" class="view">{{ data['video'].view }}--播放 · </span>
+                    <span title="历史累计弹幕数--" class="dm">--弹幕</span>
+                </div>
+            </div>
+            <div id="playerWrap" class="player-wrap" style="max-width: 800px;">
+                <div id="bofqi"  style="width: 100%;height: 100%">
+                    <div class="player_av">
+                        <div id="dplayer"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="arc_toolbar_report" class="video-toolbar report-wrap-module report-scroll-module">
+
+                <div class="ops">
+<form id="form-like-data">
+                    {% raw xsrf_form_html() %}
+                    {% if handler.name %}
+                    <input type="hidden" name="Uid" value="{{ data['self_user'].Uid }}">
+                    <input type="hidden" name="Vid" value="{{ data['video'].Vid }}">
+                        {% if data['relation_video_user_like'] %}
+                        <span title="点赞数" class="like"><i class="van-icon-videodetails_like" style="color:;"></i>{{ data['Vlike'] }}
+                        </span>
+                        <a href="javascript:void(0)" id="video_like2"
+                           data-content-VLid="{{ data['video'].Vid }}"
+                           class="van-icon-videodetails_like" >取消点赞</a>
+                        {% else %}
+                        <span title="点赞数" class="like"><i class="van-icon-videodetails_like" style="color:;"></i>{{ data['Vlike'] }}
+                        </span>
+                        <a href="javascript:void(0)" id="video_like"
+                           data-content-VLid="{{ data['video'].Vid }}"
+                           class="van-icon-videodetails_like">点赞</a>
+                        {% end %}
+
+                        {% if data['relation_video_user'] %}
+                        <span title="收藏人数" class="collect"><canvas width="34" height="34" class="ring-progress" style="width:34px;height:34px;left:-3px;top:-3px;"></canvas><!----><i class="van-icon-videodetails_collec" style="color:;"></i>{{ data['Vcollect'] }}
+                            </span>
+                        <a href="javascript:void(0)" id="video_collect2"
+                                       data-content-VCid="{{ data['video'].Vid }}"
+                                       class="van-icon-videodetails_collec">取消收藏</a>
+                        {% else %}
+                         <span title="收藏人数" class="collect"><canvas width="34" height="34" class="ring-progress" style="width:34px;height:34px;left:-3px;top:-3px;"></canvas><!----><i class="van-icon-videodetails_collec" style="color:;"></i>{{ data['Vcollect'] }}
+                            </span>
+                             <a href="javascript:void(0)" id="video_collect"
+                                       data-content-VCid="{{ data['video'].Vid }}"
+                                       class="van-icon-videodetails_collec">收藏</a>
+                        {% end %}
+                    {% else %}
+                    <span title="点赞数" class="like"><i class="van-icon-videodetails_like" style="color:;"></i>{{ data['Vlike'] }}
+                    </span>
+                    <span title="收藏人数" class="collect"><canvas width="34" height="34" class="ring-progress" style="width:34px;height:34px;left:-3px;top:-3px;"></canvas><!----><i class="van-icon-videodetails_collec" style="color:;"></i>{{ data['Vcollect'] }}
+                    </span>
+                    {% end %}
+
+</form>
+
+                </div>
+
+
+
+                <div class="more"><i class="van-icon-general_moreactions"></i><!----></div>
+
+                <div class="appeal-text">稿件投诉</div>
+
+<!--                <div id="v_desc" class="video-desc report-wrap-module report-scroll-module">-->
+
+<!--                    <div class="info open">大会员免费观看大会员免费观看大会员免费观看大会员免费观看<a target="_blank" href=""></a>-->
+<!--                        大会员免费观看-->
+<!--                    </div>-->
+<!--                </div>-->
+
+
+
+            </div>
+            <div id="v_desc" >
+                <div class="info open">
+                    *
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 12px;">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="form-data">
+                            <div class="media">
+                                {% if handler.user %}
+                                <img class="mr-3"
+                                     src="{% if handler.user.face %}/static/uploads/{{ handler.user.face }}{% else %}{{ static_url('images/male.png') }}{% end %}"
+                                     style="width: 60px;height: 60px;">
+                                {% else %}
+                                <img class="mr-3" src="{{ static_url('images/male.png') }}" style="width: 60px;height: 60px;">
+                                {% end %}
+                                <div class="media-body">
+                                    <h6>{% if handler.name %}{{ handler.name }}{% else %}游客<a href="/login/">[登录]</a> <a href="/regist/">[注册]</a>{% end %}</h6>
+                                    <textarea name="content" id="editor" style="width: 100%;"></textarea>
+                                    <input type="hidden" name="name" id="input_name"
+                                           value="{% if handler.name %}{{ handler.name }}{% else %}游客{% end %}">
+                                    {% if handler.user %}
+                                    <input type="hidden" name="face" id="input_face"
+                                           value="{% if handler.user.face %}/static/uploads/{{ handler.user.face }}{% else %}{{ static_url('images/male.png') }}{% end %}">
+                                    {% else %}
+                                    <input type="hidden" name="face" id="input_face"
+                                           value="{{ static_url('images/male.png') }}">
+                                    {% end %}
+                                </div>
+                            </div>
+                            </form>
+                            <a style="margin-top: 12px;" id="send_comment" class="btn btn-success float-right" href="javascript:void(0)">发送消息</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card" id="chat-card">
+                        <div class="card-header">评论</div>
+
+                        <div class="card-body" id="comment-list">
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="r-con">  <!-- 右侧部分 -->
+            <div id="v_upinfo" class="up-info report-wrap-module report-scroll-module">
+                <div class="u-face has-pendant">
+                     {% if data['video'].user.face %}
+                    <a href="" target="_blank" report-id="head" class="fa">
+                        <img src="/static/uploads/{{ data['video'].user.face }}" width="48" height="48" class="up-face">
+                        <img src="/static/BILIBILI/static/Homepage/videoPlay/static/image/tx2.png" width="80" height="80" class="pendant"><!---->
+                        <i class="auth o-auth"></i></a>
+                    {% else %}
+                    <a href="" target="_blank" report-id="head" class="fa">
+                        <img data-src="holder.js/200x200" width="48" height="48" class="up-face">
+                        <img src="/static/BILIBILI/static/Homepage/videoPlay/static/image/tx2.png" width="80" height="80" class="pendant"><!---->
+                        <i class="auth o-auth"></i></a>
+                    {% end %}
+                </div>
+
+                <div class="u-info">
+                    <div class="name" style="line-height:40px;height:40px;"><!---->
+                        <a href="/users/?id={{ data['video'].Uid }}" target="_blank" report-id="name" class="username">{{ data['video'].user.Uname }}</a>
+                        <a href="" target="_blank" class="message"><i class="van-icon-videodetails_messag"></i>发消息</a>
+                    </div><!---->
+                </div>
+                <div class="btn-panel"><!---->
+                    <div class="default-btn follow-btn b-gz not-follow"><span><i class="van-icon-general_addto_s"></i>
+                    关注 <span>12.0万</span></span><!----><!---->
+                    </div>
+                </div>
+
+                <div id="danmukuBox" class="danmaku-box" style="height: 300px">
+                    <div class="danmaku-wrap" style="background-color: white">
+                        <div class="Dplayer_danmu" style="width: 100%;">
+                            <div class="Dplayer_watching" style="line-height:inherit;height:40px;background-color: #f4f4f4 ">
+                                <span class="Dplayer-watching-number" title="这个数据是假的">24</span>
+                                人正在观看,<span class="danmuku_num">101</span>条弹幕
+                            </div>
+
+                            <ul class="Dplayer_list">
+                                <li>时间</li>
+                                <li>发送内容</li>
+                                <li>用户类型</li>
+                            </ul>
+                            <ul class="list_ovefiow">
+
+                            </ul>
+
+                        </div>
+                    </div>
+                </div><!---->
+
+
+                <div id="reco_list" class="recommend-list report-wrap-module report-scroll-module">
+
+                <div class="rec-title" style="display: block">
+                    相关推荐
+
+                </div>
+                <div class="rec-list"><!----><!----><!---->
+                    <div class="video-page-card">
+                        <div class="card-box">
+                            <div class="pic-box">
+                                <div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="实习老师粉笔画让网友跪服 神还原《你的名字》" width="168" height="95"></a><span class="mask-video"></span><span class="duration">04:26</span>
+                                </div>
+                                <div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span>
+                                </div>
+                            </div>
+                            <div class="info"><a href="/video/av7276464/?spm_id_from=333.788.videocard.0" title="实习老师粉笔画让网友跪服 神还原《你的名字》" class="title">实习老师粉笔画让网友跪服 神还原《你的名字》</a>
+                                <div class="count up"><a href="//space.bilibili.com/583792/" target="_blank">H·D</a>
+                                </div>
+                                <div class="count">
+                                    172.2万播放 · 1.4万弹幕
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="video-page-card">
+                        <div class="card-box">
+                            <div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="【大陆官方预告片】《你的名字。》大陆官方预告片！！！首发“初见版”预告！！！！" width="168" height="95"></a><span class="mask-video"></span><span class="duration">01:50</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="/video/av7185185/?spm_id_from=333.788.videocard.1" title="【大陆官方预告片】《你的名字。》大陆官方预告片！！！首发“初见版”预告！！！！" class="title">【大陆官方预告片】《你的名字。》大陆官方预告片！！！首发“初见版”预告！！！！</a><div class="count up"><a href="//space.bilibili.com/1791122/" target="_blank">贴吧坦克君</a></div><div class="count">
+                            111.4万播放 · 6814弹幕
+                        </div></div></div></div>
+
+
+                    <div class="video-page-card"><div class="card-box"><div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="【1080P字幕版】《你的名字。》交响乐团音乐会" width="168" height="95"></a><span class="mask-video"></span><span class="duration">2:01:37</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="/video/av70323398/?spm_id_from=333.788.videocard.2" title="【1080P字幕版】《你的名字。》交响乐团音乐会" class="title">【1080P字幕版】《你的名字。》交响乐团音乐会</a><div class="count up"><a href="//space.bilibili.com/7349630/" target="_blank">lh9831</a></div><div class="count">
+                        3.1万播放 · 771弹幕
+                    </div></div></div></div>
+
+                    <div class="video-page-card">
+                        <div class="card-box"><div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="你身在何方 【你的名字AMV】" width="168" height="95"></a><span class="mask-video"></span><span class="duration">03:39</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="/video/av7449411/?spm_id_from=333.788.videocard.3" title="你身在何方 【你的名字AMV】" class="title">你身在何方 【你的名字AMV】</a><div class="count up"><a href="//space.bilibili.com/60783/" target="_blank">FCSMio</a></div><div class="count">
+                            149.6万播放 · 3.0万弹幕
+                        </div></div></div></div>
+
+                    <div class="video-page-card">
+                        <div class="card-box"><div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="【预告】你的名字。真人版（预定2019年5月）" width="168" height="95"></a><span class="mask-video"></span><span class="duration">01:35</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="/video/av22543323/?spm_id_from=333.788.videocard.4" title="【预告】你的名字。真人版（预定2019年5月）" class="title">【预告】你的名字。真人版（预定2019年5月）</a><div class="count up"><a href="//space.bilibili.com/15823178/" target="_blank">柴犬三号</a></div><div class="count">
+                            67.9万播放 · 2541弹幕
+                        </div></div></div></div>
+                    <div class="video-page-card">
+                        <div class="card-box"><div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="【陈乐一】你的名字ED《なんでもないや(没什么大不了)》【超清完整版】" width="168" height="95"></a><span class="mask-video"></span><span class="duration">04:54</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="/video/av38878747/?spm_id_from=333.788.videocard.5" title="【陈乐一】你的名字ED《なんでもないや(没什么大不了)》【超清完整版】" class="title">【陈乐一】你的名字ED《なんでもないや(没什么大不了)》【超清完整版】</a><div class="count up"><a href="//space.bilibili.com/1693461/" target="_blank">千鳥かなめ</a></div><div class="count">
+                            137.0万播放 · 3724弹幕
+                        </div></div></div></div>
+                    <div class="video-page-card">
+                        <div class="card-box">
+                            <div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="《你的名字》中那些你不知道的彩蛋/细节" width="168" height="95"></a><span class="mask-video"></span><span class="duration">09:23</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="/video/av7391417/?spm_id_from=333.788.videocard.6" title="《你的名字》中那些你不知道的彩蛋/细节" class="title">《你的名字》中那些你不知道的彩蛋/细节</a><div class="count up"><a href="//space.bilibili.com/2733216/" target="_blank">中二少年晓凯</a></div><div class="count">
+                            274.7万播放 · 2.1万弹幕
+                        </div></div></div></div>
+
+                    <div class="video-page-card">
+                        <div class="card-box"><div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="【木吉他】超好听！你的名字ost黄昏之时【奏有】" width="168" height="95"></a><span class="mask-video"></span><span class="duration">03:07</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="/video/av7331952/?spm_id_from=333.788.videocard.7" title="【木吉他】超好听！你的名字ost黄昏之时【奏有】" class="title">【木吉他】超好听！你的名字ost黄昏之时【奏有】</a><div class="count up"><a href="//space.bilibili.com/9134070/" target="_blank">奏有</a></div><div class="count">
+                            119.0万播放 · 1.4万弹幕
+                        </div></div></div></div>
+
+                    <div class="video-page-card">
+                        <div class="card-box"><div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="【你的名字】宫水三叶的千层套路" width="168" height="95"></a><span class="mask-video"></span><span class="duration">02:00</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="/video/av75619385/?spm_id_from=333.788.videocard.8" title="【你的名字】宫水三叶的千层套路" class="title">【你的名字】宫水三叶的千层套路</a><div class="count up"><a href="//space.bilibili.com/8083661/" target="_blank">法国腌肉</a></div><div class="count">
+                            3.7万播放 · 79弹幕
+                        </div></div></div></div>
+
+                    <div class="video-page-card">
+                        <div class="card-box"><div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="【你的名字】鲲鲲与乔碧萝的爱情故事" width="168" height="95"></a><span class="mask-video"></span><span class="duration">01:51</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="/video/av64716928/?spm_id_from=333.788.videocard.9" title="【你的名字】鲲鲲与乔碧萝的爱情故事" class="title">【你的名字】鲲鲲与乔碧萝的爱情故事</a><div class="count up"><a href="//space.bilibili.com/8918982/" target="_blank">机巧绅士不会受伤w</a></div><div class="count">
+                            400.0万播放 · 1.7万弹幕
+                        </div></div></div></div>
+
+                    <div class="video-page-card"><div class="card-box"><div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="日本街头唱《你的名字》火花 RADWIMPS【平冈优也】" width="168" height="95"></a><span class="mask-video"></span><span class="duration">07:59</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="/video/av66519837/?spm_id_from=333.788.videocard.10" title="日本街头唱《你的名字》火花 RADWIMPS【平冈优也】" class="title">日本街头唱《你的名字》火花 RADWIMPS【平冈优也】</a><div class="count up"><a href="//space.bilibili.com/396658959/" target="_blank">平岡優也</a></div><div class="count">
+                        102.3万播放 · 3242弹幕
+                    </div></div></div></div>
+                    <div class="video-page-card">
+                        <div class="card-box"><div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="《你的名字》有多火？引各国粉丝来朝圣，惊现情侣还原经典场景！" width="168" height="95"></a><span class="mask-video"></span><span class="duration">03:19</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="" title="《你的名字》有多火？引各国粉丝来朝圣，惊现情侣还原经典场景！" class="title">《你的名字》有多火？引各国粉丝来朝圣，惊现情侣还原经典场景！</a><div class="count up"><a href="" target="_blank">友曰旅行</a></div><div class="count">
+                            13.6万播放 · 1172弹幕
+                        </div></div></div></div>
+                    <div class="video-page-card"><div class="card-box"><div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="【新海诚式圣地巡礼】从现在起，我将追寻「你的名字」。【君名圣地巡礼攻略】" width="168" height="95"></a><span class="mask-video"></span><span class="duration">21:57</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="/video/av78150143/?spm_id_from=333.788.videocard.12" title="【新海诚式圣地巡礼】从现在起，我将追寻「你的名字」。【君名圣地巡礼攻略】" class="title">【新海诚式圣地巡礼】从现在起，我将追寻「你的名字」。【君名圣地巡礼攻略】</a><div class="count up"><a href="//space.bilibili.com/10794511/" target="_blank">画邴充饥</a></div><div class="count">
+                        21.2万播放 · 3330弹幕
+                    </div></div></div></div>
+                    <div class="video-page-card"><div class="card-box"><div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="【王司徒】前前前世（你的名字）" width="168" height="95"></a><span class="mask-video"></span><span class="duration">04:43</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="/video/av7413041/?spm_id_from=333.788.videocard.13" title="【王司徒】前前前世（你的名字）" class="title">【王司徒】前前前世（你的名字）</a><div class="count up"><a href="//space.bilibili.com/1706344/" target="_blank">昔日友人</a></div><div class="count">
+                        176.6万播放 · 3.1万弹幕
+                    </div></div></div></div>
+                    <div class="video-page-card"><div class="card-box"><div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="【Chin×Rikinn】前前前世【你的名字。】" width="168" height="95"></a><span class="mask-video"></span><span class="duration">03:03</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="/video/av41904646/?spm_id_from=333.788.videocard.18" title="【Chin×Rikinn】前前前世【你的名字。】" class="title">【Chin×Rikinn】前前前世【你的名字。】</a><div class="count up"><a href="//space.bilibili.com/2488966/" target="_blank">Chin_cc</a></div><div class="count">
+                        6.0万播放 · 186弹幕
+                    </div></div></div></div>
+                    <div class="video-page-card"><div class="card-box"><div class="pic-box"><div class="pic"><a href=""><img src="/static/video/imges/20220603170904f801a5ded5064df2b730a32f1d27c0f3.jpeg" alt="【马云】钱钱钱逝【你的钱包主题曲】" width="168" height="95"></a><span class="mask-video"></span><span class="duration">03:39</span></div><div class="watch-later-video van-watchlater"><span class="wl-tips" style="display:none;"></span></div></div><div class="info"><a href="/video/av16123990/?spm_id_from=333.788.videocard.19" title="【马云】钱钱钱逝【你的钱包主题曲】" class="title">【马云】钱钱钱逝【你的钱包主题曲】</a><div class="count up"><a href="//space.bilibili.com/2283296/" target="_blank">小猪P_</a></div><div class="count">
+                        115.5万播放 · 7539弹幕
+                    </div></div></div></div></div>
+
+
+                <div class="rec-footer" style=";">展开</div></div>
+                <div id="slide_ad" class="report-wrap-module report-scroll-module">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="float-nav" >
+            <div class="nav-menu">
+                <div title="返回顶部" class="item backup"><i class="van-icon-general_pullup_s"></i></div>
+                <div title="点击打开迷你播放器" class="item mini"><span>mini</span><span>OFF</span></div>
+
+            </div>
+        </div><!---->
+
+
+    </div>
+
+
+
+
+{% end %}
+
+{% block foot %}
+
+<script src="{{ static_url('js/comment.js') }}"></script>
+<script src="{{ static_url('js/video_like.js') }}"></script>
+<script src="{{ static_url('js/video_like2.js') }}"></script>
+<script src="{{ static_url('js/video_collect.js') }}"></script>
+<script src="{{ static_url('js/video_collect2.js') }}"></script>
+<script>
+
+    $(document).ready(function (){
+        video_like('/videolike/','/playchat/',[],'ok');
+    })
+
+    $(document).ready(function (){
+        video_like2('/videolike2/','/playchat/',[],'ok');
+    })
+
+
+    $(document).ready(function (){
+        video_collect('/videocollect/','/playchat/',[],'ok');
+    })
+
+    $(document).ready(function (){
+        video_collect2('/videocollect2/','/playchat/',[],'ok');
+    })
+
+
+
+    $(document).ready(function (){
+        $(".user-list").click(function(){
+            location.href = "/users/?id=" + {{ data['video'].Uid }};
+        });
+    });
+
+    var ue = UE.getEditor('editor', {
+        toolbars: [
+            [ 'emotion']
+        ]
+    });
+
+    function dplayer(vur1){
+        window.dp = new DPlayer({
+            container:document.getElementById('dplayer'),
+            screenshot:true,
+            autoplay:false,
+            theme: '#FADFA3',
+            loop: true,
+            lang: 'zh-cn',
+            hotkey: true,
+            preload: 'auto',
+            volume: 0.7,
+            mutex: true,
+            video:{
+                url: vur1,
+            },
+            danmaku:{
+                id: "{{ data['video'].Vid }}",
+                api: '/dm/',
+                user:"{% if handler.name %}{{ handler.name }}{% else %}游客{% end %}"
+            }
+        });
+    }
+
+    dplayer(" /static/video/{{ data['video'].url }} ");
+</script>
+<!--<script src="{{ static_url('js/chat.js') }}"></script>-->
+<!--<script src="{{ static_url('js/comment.js') }}"></script>-->
+<!--<script src="{{ static_url('js/video_like.js') }}></script>-->
+{% end %}

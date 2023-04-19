@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>demo</title>
+
+</head>
+
+<body>
+
+
+<div id = "dplayer"></div>
+
+    <script src="{{ static_url('js/flv.min.js')}}"></script>
+    <script src="{{ static_url('dplayer/DPlayer.min.js')}}"></script>
+    <link rel="stylesheet" href="{{ static_url('dplayer/DPlayer.min.css')}}">
+
+
+<script>
+    const dp = new DPlayer({
+        container: document.getElementById('dplayer'),
+        live: true,
+        apiBackend: {
+            read: function (endpoint, callback) {
+                console.log('Pretend to connect WebSocket');
+                callback();
+            },
+            send: function (endpoint, danmakuData, callback) {
+                console.log('Pretend to send danmaku via WebSocket', danmakuData);
+                callback();
+            },
+        },
+        video: {
+            url: 'http://192.168.168.124/live?port=1935&app=live&stream=test',
+            type: 'flv',
+        },
+    });
+
+</script>
+
+
+
+</body>
+
+</html>

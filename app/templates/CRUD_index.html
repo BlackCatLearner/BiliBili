@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+		<meta name="keywords" content="LightYear,LightYearAdmin,光年,后台模板,后台管理系统,光年HTML模板">
+		<meta name="description" content="Light Year Admin V4是一个基于Bootstrap v4.4.1的后台管理系统的HTML模板。">
+		<meta name="author" content="yinq">
+		<title>{{data['title']}}</title>
+		<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+		<link rel="stylesheet" type="text/css" href="{{static_url('CRUD/css/materialdesignicons.min.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{static_url('CRUD/css/bootstrap.min.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{static_url('CRUD/js/bootstrap-multitabs/multitabs.min.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{static_url('CRUD/css/animate.min.css')}}">
+		<link rel="stylesheet" type="text/css" href="{{static_url('CRUD/css/style.min.css')}}">
+	</head>
+
+	<body>
+
+		<div class="lyear-layout-web">
+			<div class="lyear-layout-container">
+				<!--左侧导航-->
+				<aside class="lyear-layout-sidebar">
+
+					<!-- logo -->
+					<div id="logo" class="sidebar-header">
+						<a href="index.html"><img src="{{static_url('CRUD/images/logo-sidebar.png')}}" title="LightYear" alt="LightYear" /></a>
+					</div>
+					<div class="lyear-layout-sidebar-info lyear-scroll">
+
+						<nav class="sidebar-main">
+							<ul class="nav-drawer">
+								<li class="nav-item active">
+									<a class="multitabs" href="{{static_url('CRUD/lyear_main.html')}}">
+										<i class="mdi mdi-home-city-outline"></i>
+										<span>首页</span>
+									</a>
+								</li>
+
+								<li class="nav-item nav-item-has-subnav">
+									<a href="javascript:void(0)"><i class="mdi mdi-stove"></i> <span>用户管理</span></a>
+									<ul class="nav nav-subnav">
+										<li> <a class="multitabs" href="/cruduser/">用户管理</a> </li>
+									</ul>
+									<a href="javascript:void(0)"><i class="mdi mdi-stove"></i> <span>视频管理</span></a>
+									<ul class="nav nav-subnav">
+										<li> <a class="multitabs" href="/crudvideo/">视频管理</a> </li>
+										<li> <a class="multitabs" href="/crudcomment/">视频评论管理</a> </li>
+									</ul>
+									<a href="javascript:void(0)"><i class="mdi mdi-stove"></i> <span>直播管理</span></a>
+									<ul class="nav nav-subnav">
+										<li> <a class="multitabs" href="/crudmsg/">直播评论管理</a> </li>
+										<li> <a class="multitabs" href="/crudlive/">直播管理</a> </li>
+
+									</ul>
+									<a href="javascript:void(0)"><i class="mdi mdi-stove"></i> <span>关系管理</span></a>
+									<ul class="nav nav-subnav">
+										<li> <a class="multitabs" href="/crudrelationuser/">用户关系管理</a> </li>
+										<li> <a class="multitabs" href="/crudrelationvideo/">视频收藏关系管理</a> </li>
+										<li> <a class="multitabs" href="/crudrelationvideolike/">视频点赞关系管理</a> </li>
+									</ul>
+								</li>
+
+							</ul>
+						</nav>
+
+					</div>
+
+				</aside>
+				<!--End 左侧导航-->
+
+				<!--头部信息-->
+				<header class="lyear-layout-header">
+
+					<nav class="navbar">
+
+						<div class="navbar-left">
+							<div class="lyear-aside-toggler">
+								<span class="lyear-toggler-bar"></span>
+								<span class="lyear-toggler-bar"></span>
+								<span class="lyear-toggler-bar"></span>
+							</div>
+						</div>
+
+					</nav>
+
+				</header>
+				<!--End 头部信息-->
+
+				页面主要内容
+				<main class="lyear-layout-content">
+					<div id="iframe-content"></div>
+				</main>
+				End 页面主要内容
+			</div>
+		</div>
+
+		<script type="text/javascript" src="{{static_url('CRUD/js/jquery.min.js')}}"></script>
+		<script type="text/javascript" src="{{static_url('CRUD/js/popper.min.js')}}"></script>
+		<script type="text/javascript" src="{{static_url('CRUD/js/bootstrap.min.js')}}"></script>
+		<script type="text/javascript" src="{{static_url('CRUD/js/perfect-scrollbar.min.js')}}"></script>
+		<script type="text/javascript" src="{{static_url('CRUD/js/bootstrap-multitabs/multitabs.min.js')}}"></script>
+		<script type="text/javascript" src="{{static_url('CRUD/js/jquery.cookie.min.js')}}"></script>
+		<script type="text/javascript" src="{{static_url('CRUD/js/index.min.js')}}"></script>
+	</body>
+</html>

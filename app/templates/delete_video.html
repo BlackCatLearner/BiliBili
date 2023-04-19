@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link href="{{static_url('CRUD/css/materialdesignicons.min.css')}}" rel="stylesheet">
+<link href="{{static_url('CRUD/css/style.min.css')}}" rel="stylesheet">
+{% end %}
+
+
+{% block content %}
+
+<div class="container-fluid p-t-15">
+
+  <div class="row">
+
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+              <ul class="nav nav-tabs page-tabs pt-2 pl-3 pr-3">
+                  <li class="nav-item"> <a href="/video/?id={{ data['user'].Uid }}" class="nav-link active">视频投稿</a> </li>
+                  <li class="nav-item"> <a href="/videomodel/?id={{ data['user'].Uid }}" class="nav-link">模型生成</a> </li>
+                  <li class="nav-item"> <a href="/examinevideo/?id={{ data['user'].Uid }}" class="nav-link">审核列表</a> </li>
+                  <li class="nav-item"> <a href="/delete_video/?id={{ data['user'].Uid }}" class="nav-link">视频删除</a> </li>
+              </ul>
+            </div>
+            <div class="card-body">
+                <form id="form-data">
+<!--                    {% set u = data['user'] %}-->
+                    <div class="form-group">
+                        <label>选择视频</label>
+                        {% raw xsrf_form_html() %}
+<!--                        <input type="hidden" name="id" value="{{ u.Uid }}">-->
+<!--                        <input type="text"-->
+<!--                               name="Vname"-->
+<!--                               class="form-control form-width"-->
+<!--                               placeholder="请输入视频名！">-->
+<!--                        <p class="text-danger" id="error_Vname"></p>-->
+                    </div>
+                    <div class="form-group">
+                        {% set v = data['video'] %}
+                        <div class="card-columns">
+                            {% if v['data'] %}
+                            {% for val in v['data'] %}
+                            <div class="card video-list" data-content-id="{{ val.Vid }}">
+                                <img class="card-img-top "
+                                     src="/static/video/imges/{{ val.logo }}" width="200" height="150">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio"
+                                           id="input_video{{ val.Vid }}"
+                                           class="custom-control-input"
+                                           value="{{ val.Vid }}"
+                                           name="Vid">
+                                    <label class="custom-control-label" for="input_video{{ val.Vid }}">{{ val.Vname }}</label>
+                                </div>
+                            </div>
+                            {% end %}
+                            {% end %}
+                        </div>
+                        {% module page_deletevideo(v,data['q']) %}
+<!--                       埋了一个坑，没有调入user的id 暂时先用id=1 代替  在page_user.html中-->
+
+                    </div>
+                    <p class="text-danger" id="error_Vid"></p>
+
+                    <div class="form-group">
+                            <a href="javascript:void(0)" id="btn-sub" class="btn btn-primary">删除</a>
+                    </div>
+
+                </form>
+
+
+            </div>
+        </div>
+        <div>
+
+        </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+{% end %}
+
+{% block foot %}
+<script src="{{ static_url('js/upload_logo.js')}}"></script>
+<script src="{{ static_url('js/upload_url.js')}}"></script>
+<script src="{{ static_url('js/request.js')}}"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+  bsCustomFileInput.init();
+});
+</script>
+
+<script>
+    $(document).ready(function (){
+        request('/delete_video/','/user/',['Vid'],'删除成功');
+    })
+</script>
+{% end %}
